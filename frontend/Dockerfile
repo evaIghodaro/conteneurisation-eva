@@ -1,7 +1,6 @@
 FROM nginx:alpine
 
-# On copie le fichier HTML et la configuration Nginx
+# On copie le fichier HTML dans le dossier servi par Nginx
 COPY index.html /usr/share/nginx/html/index.html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

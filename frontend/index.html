@@ -70,9 +70,9 @@
   </ul>
 
   <script>
-    // L'API est accessible via le proxy Nginx /api en production,
-    // ou en direct sur le port 3000 en développement local.
-    const API_URL = window.API_URL || "/api";
+    // L'API est accessible via la variable d'env injectée par Nginx
+    // ou en direct sur le port 3000 si on est en dev
+    const API_URL = window.API_URL || "http://localhost:3000";
 
     const statusEl = document.getElementById("status");
     const errorEl  = document.getElementById("error");
