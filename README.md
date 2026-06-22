@@ -1,36 +1,73 @@
-# TP2 - Docker Compose
+# TP1 - Dockerfile corrigé
 
-Ce projet montre un TP complet Docker Compose avec :
+## Objectif
 
-- `frontend` : interface web statique servie par Nginx
-- `api` : API Node.js qui stocke des messages dans PostgreSQL
-- `db` : base de données PostgreSQL
+Réparer l'image Docker cassée fournie pour le TP1 et appliquer les bonnes pratiques Docker :
+- pas de secrets en dur dans l'image
+- cache Docker exploité correctement
+- container non-root
+- image finale légère et fonctionnelle
+- fichier `.dockerignore` présent
 
-## Structure
+## Contenu du projet
 
-- `api/` contient l'API Node.js
-- `frontend/` contient le HTML et la configuration Nginx
-- `docker-compose.yml` assemble les 3 services
+- `Dockerfile` : build Docker corrigé en multi-stage
+- `.dockerignore` : exclusions pour le contexte de build
+- `package.json` : dépendances de l'application
+- `package-lock.json` : verrouillage des dépendances
+- `index.js` : application Node.js
+- `tp1-enonce.docx` : énoncé du TP
 
-## Exécution
+## Commandes
 
-Depuis le dossier racine du projet (`SujetTP2/SujetTP2`) :
+### Construire l'image
 
-```bash
-docker compose up --build
+```powershell
+cd "C:\Users\evaig\Downloads\SujetTP1\SujetTP1"
+docker build -t tp1:corrige .
 ```
 
-Puis ouvrir :
+### Vérifier l'image
 
-- `http://localhost:8080` pour l'application web
+```powershell
+docker images tp1:corrige
+```
 
-## API disponibles
+### Vérifier que le container n'est pas root
 
-- `GET /messages` : liste tous les messages
-- `POST /messages` : ajoute un message
-- `GET /health` : vérifie que l'API tourne
+```powershell
+docker run --rm tp1:corrige whoami
+```
 
-## Notes
+Le résultat attendu est `node`.
 
-- Les messages sont stockés dans PostgreSQL.
-- Le frontend envoie les requêtes à `/api/messages` via le proxy Nginx.
+### Lancer l'application
+
+```powershell
+docker run -p 3000:3000 tp1:corrige
+```
+
+Puis ouvrir dans le navigateur :
+
+```text
+http://localhost:3000
+```
+
+## Résultat attendu
+
+- L'application doit être accessible sur `http://localhost:3000`
+- Un message envoyé via le formulaire doit être affiché
+- Le container doit tourner avec l'utilisateur `node`
+- L'image doit être raisonnablement légère (environ 181 MB)
+
+## Points importants
+
+- `package-lock.json` est généré pour garantir la reproductibilité des dépendances
+- `.dockerignore` évite d'envoyer des fichiers inutiles dans le contexte de build
+- Le Dockerfile utilise un build multi-stage pour réduire la taille finale
+- Aucune clé ou secret n'est stockée dans le Dockerfile ou dans l'image
+
+## Remarques
+
+Ce projet est prêt pour le rendu du TP1 : la correction Docker est appliquée et l'application fonctionne correctement.
+
